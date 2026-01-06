@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DevMastery Hub - Learn, Compete, Build, Get Hired</title>
+<meta name="description" content="Complete developer platform with 800+ resources, live hackathons, job board, and community. Master 12 tech fields from beginner to expert.">
+<style>
+:root{--bg:#0a0a14;--card:#14141f;--text:#e8e8f0;--accent:#6366f1;--accent2:#8b5cf6;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--premium:#fbbf24}
+*{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg)}
+*::-webkit-scrollbar{width:8px}*::-webkit-scrollbar-track{background:var(--bg)}*::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+body{font-family:'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+
+/* Auth Styles */
+.auth-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.1))}
+.auth-box{background:var(--card);padding:40px;border-radius:20px;max-width:500px;width:100%;border:2px solid rgba(99,102,241,0.3);box-shadow:0 25px 70px rgba(0,0,0,0.6)}
+.auth-logo{text-align:center;margin-bottom:35px}
+.auth-logo h1{font-size:2.8em;background:linear-gradient(135deg,#6366f1,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;font-weight:800}
+.auth-logo p{color:#9ca3af;font-size:1.15em}
+.form-group{margin-bottom:22px}
+.form-group label{display:block;margin-bottom:10px;font-weight:600;color:var(--text);font-size:0.95em}
+.form-group input,.form-group select{width:100%;padding:14px 16px;background:rgba(99,102,241,0.08);border:2px solid rgba(99,102,241,0.25);border-radius:10px;color:var(--text);font-size:1em;transition:all 0.3s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--accent);background:rgba(99,102,241,0.12);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:10px;font-size:1.05em;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:12px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(99,102,241,0.4)}
+.btn-secondary{background:transparent;border:2px solid var(--accent);color:var(--accent)}
+.btn-secondary:hover{background:var(--accent);color:#fff}
+.toggle-auth{text-align:center;margin-top:25px;color:#9ca3af;font-size:0.95em}
+.toggle-auth a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600}
+.toggle-auth a:hover{text-decoration:underline}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:30px;padding-top:30px;border-top:2px solid rgba(99,102,241,0.2)}
+.feature-item{display:flex;align-items:center;gap:12px;color:#9ca3af;font-size:0.9em}
+.feature-item .icon{font-size:1.4em}
+.hidden{display:none}
+
+/* App Styles */
+.app-container{display:none}
+.app-container.active{display:block}
+.header{background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:16px 24px;position:sticky;top:0;z-index:1000;box-shadow:0 4px 25px rgba(0,0,0,0.5)}
+.header-content{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo h1{font-size:1.7em;font-weight:800}
+.user-section{display:flex;align-items:center;gap:20px}
+.user-info{display:flex;align-items:center;gap:15px}
+.user-badge{padding:6px 14px;background:rgba(251,191,36,0.2);border:2px solid var(--premium);border-radius:8px;font-weight:700;color:var(--premium);font-size:0.85em}
+.user-stats{display:flex;gap:15px}
+.stat-pill{padding:6px 12px;background:rgba(255,255,255,0.15);border-radius:8px;font-size:0.85em;font-weight:600}
+.logout-btn{padding:10px 18px;background:rgba(255,255,255,0.2);border:none;border-radius:8px;color:#fff;cursor:pointer;font-weight:600;transition:all 0.3s}
+.logout-btn:hover{background:rgba(255,255,255,0.3)}
+
+.nav{background:#14141f;display:flex;overflow-x:auto;position:sticky;top:70px;z-index:999;border-bottom:2px solid rgba(99,102,241,0.3);box-shadow:0 2px 15px rgba(0,0,0,0.3)}
+.nav button{padding:14px 22px;background:transparent;border:none;color:#9ca3af;cursor:pointer;font-size:0.95em;font-weight:600;transition:all 0.3s;white-space:nowrap;border-bottom:3px solid transparent}
+.nav button:hover{color:var(--text);background:rgba(99,102,241,0.1)}
+.nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--bg)}
+
+.section{display:none;padding:30px 20px;max-width:1800px;margin:0 auto;animation:fadeIn 0.4s}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+.hero{background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.15));padding:50px 40px;border-radius:20px;margin-bottom:35px;text-align:center;border:2px solid rgba(99,102,241,0.3);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(99,102,241,0.1) 0%,transparent 70%);animation:pulse 5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.hero h2{font-size:2.8em;margin-bottom:18px;background:linear-gradient(135deg,#6366f1,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative;z-index:1;font-weight:800}
+.hero p{font-size:1.25em;color:#9ca3af;position:relative;z-index:1;max-width:800px;margin:0 auto}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;margin-bottom:35px}
+.stat-card{background:linear-gradient(135deg,var(--accent),var(--accent2));padding:28px;border-radius:15px;text-align:center;color:#fff;box-shadow:0 10px 30px rgba(99,102,241,0.3);transition:all 0.3s}
+.stat-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(99,102,241,0.4)}
+.stat-card h3{font-size:1em;opacity:0.95;margin-bottom:12px;font-weight:600}
+.stat-card .big-num{font-size:3em;font-weight:800;display:block;margin:12px 0}
+.stat-card .detail{font-size:0.9em;opacity:0.9}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:22px;margin:30px 0}
+.card{background:var(--card);border-radius:15px;padding:28px;border:2px solid rgba(99,102,241,0.2);transition:all 0.3s;cursor:pointer;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6,#ec4899);transform:scaleX(0);transition:transform 0.3s}
+.card:hover{transform:translateY(-6px);box-shadow:0 18px 45px rgba(99,102,241,0.3);border-color:var(--accent)}
+.card:hover::before{transform:scaleX(1)}
+
+.card-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:18px}
+.card-icon{font-size:2.8em}
+.card-badge{padding:6px 14px;border-radius:8px;font-size:0.8em;font-weight:700}
+.badge-free{background:rgba(16,185,129,0.2);color:var(--success)}
+.badge-premium{background:rgba(251,191,36,0.2);color:var(--premium)}
+.badge-live{background:rgba(239,68,68,0.2);color:var(--danger);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.6}}
+
+.card-title{font-size:1.6em;margin:18px 0 12px;font-weight:700}
+.card-desc{color:#9ca3af;margin-bottom:18px;font-size:0.98em;line-height:1.7}
+.card-meta{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+.tag{padding:5px 12px;background:rgba(99,102,241,0.2);border-radius:6px;font-size:0.8em;font-weight:600;color:var(--accent)}
+
+.progress-bar{width:100%;height:10px;background:rgba(99,102,241,0.2);border-radius:10px;overflow:hidden;margin:18px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--accent));border-radius:10px;transition:width 0.6s ease}
+
+.btn-primary{padding:12px 22px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:0.95em;font-weight:700;width:100%;transition:all 0.3s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(99,102,241,0.4)}
+
+.premium-banner{background:linear-gradient(135deg,#fbbf24,#f59e0b);padding:35px;border-radius:20px;margin:35px 0;text-align:center;color:#000;box-shadow:0 15px 50px rgba(251,191,36,0.3)}
+.premium-banner h3{font-size:2.2em;margin-bottom:15px;font-weight:800}
+.premium-banner p{font-size:1.15em;margin-bottom:25px;opacity:0.9}
+.premium-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin:25px 0}
+.premium-feature{background:rgba(0,0,0,0.1);padding:15px;border-radius:10px;font-weight:600}
+
+.hackathon-card{background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(249,115,22,0.1));border:2px solid var(--danger)}
+.job-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,150,105,0.1));border:2px solid var(--success)}
+
+.countdown{display:flex;gap:15px;justify-content:center;margin:20px 0}
+.countdown-item{text-align:center;padding:12px 18px;background:rgba(99,102,241,0.1);border-radius:10px}
+.countdown-num{font-size:2em;font-weight:800;display:block;color:var(--accent)}
+.countdown-label{font-size:0.85em;color:#9ca3af}
+
+@media(max-width:768px){
+.grid{grid-template-columns:1fr}
+.stats-grid{grid-template-columns:1fr}
+.premium-features{grid-template-columns:1fr}
+.user-section{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- Auth Container -->
+<div class="auth-container" id="authContainer">
+<div class="auth-box">
+<div class="auth-logo">
+<h1>🚀 DevMastery Hub</h1>
+<p>Learn. Compete. Build. Get Hired.</p>
+</div>
+
+<div id="loginForm">
+<div class="form-group">
+<label>Email Address</label>
+<input type="email" id="loginEmail" placeholder="your@email.com">
+</div>
+<div class="form-group">
+<label>Password</label>
+<input type="password" id="loginPassword" placeholder="Enter your password">
+</div>
+<button class="btn" onclick="login()">Login & Start Journey 🚀</button>
+<button class="btn btn-secondary" onclick="demoLogin()">Try Free Demo 🎯</button>
+<div class="toggle-auth">
+Don't have an account? <a onclick="showSignup()">Sign Up Free</a>
+</div>
+</div>
+
+<div id="signupForm" class="hidden">
+<div class="form-group">
+<label>Full Name</label>
+<input type="text" id="signupName" placeholder="Your full name">
+</div>
+<div class="form-group">
+<label>Email Address</label>
+<input type="email" id="signupEmail" placeholder="your@email.com">
+</div>
+<div class="form-group">
+<label>Password</label>
+<input type="password" id="signupPassword" placeholder="Create strong password">
+</div>
+<div class="form-group">
+<label>I'm interested in</label>
+<select id="signupInterest">
+<option>Full Stack Development</option>
+<option>Data Science & AI/ML</option>
+<option>Mobile Development</option>
+<option>DevOps & Cloud</option>
+<option>Cybersecurity</option>
+<option>Blockchain & Web3</option>
+<option>Game Development</option>
+<option>All of the above</option>
+</select>
+</div>
+<button class="btn" onclick="signup()">Create Free Account 🎯</button>
+<div class="toggle-auth">
+Already have an account? <a onclick="showLogin()">Login</a>
+</div>
+</div>
+
+<div class="features-grid">
+<div class="feature-item">
+<span class="icon">📚</span>
+<span>800+ Free Resources</span>
+</div>
+<div class="feature-item">
+<span class="icon">🏆</span>
+<span>Live Hackathons</span>
+</div>
+<div class="feature-item">
+<span class="icon">💼</span>
+<span>Job Board</span>
+</div>
+<div class="feature-item">
+<span class="icon">🎓</span>
+<span>Certifications</span>
+</div>
+<div class="feature-item">
+<span class="icon">👥</span>
+<span>Community</span>
+</div>
+<div class="feature-item">
+<span class="icon">🎯</span>
+<span>Track Progress</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- App Container -->
+<div class="app-container" id="appContainer">
+<div class="header">
+<div class="header-content">
+<div class="logo">
+<h1>🚀 DevMastery Hub</h1>
+</div>
+<div class="user-section">
+<div class="user-stats">
+<div class="stat-pill">⚡ <span id="userPoints">0</span> pts</div>
+<div class="stat-pill">🏆 Level <span id="userLevel">1</span></div>
+</div>
+<div class="user-info">
+<span class="user-badge" id="userBadge">FREE</span>
+<span style="font-weight:600" id="userName">User</span>
+<button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+</div>
+</div>
+</div>
+
+<nav class="nav">
+<button class="active" data-tab="dashboard">🏠 Dashboard</button>
+<button data-tab="learn">📚 Learn</button>
+<button data-tab="hackathons">🏆 Hackathons</button>
+<button data-tab="jobs">💼 Jobs</button>
+<button data-tab="projects">🛠️ Projects</button>
+<button data-tab="community">👥 Community</button>
+<button data-tab="premium">⭐ Premium</button>
+</nav>
+
+<!-- Dashboard Section -->
+<div class="section active" id="dashboard">
+<div class="hero">
+<h2>Welcome to DevMastery Hub! 🚀</h2>
+<p>Your complete platform to learn, compete in hackathons, build projects, and land your dream job</p>
+</div>
+
+<div class="stats-grid">
+<div class="stat-card">
+<h3>📚 Learning Progress</h3>
+<span class="big-num" id="learningProgress">0%</span>
+<span class="detail">Across 12 fields</span>
+</div>
+<div class="stat-card">
+<h3>🏆 Hackathons Joined</h3>
+<span class="big-num" id="hackathonsJoined">0</span>
+<span class="detail">5 live now</span>
+</div>
+<div class="stat-card">
+<h3>🛠️ Projects Built</h3>
+<span class="big-num" id="projectsBuilt">0</span>
+<span class="detail">80+ ideas available</span>
+</div>
+<div class="stat-card">
+<h3>💼 Job Applications</h3>
+<span class="big-num" id="jobApplications">0</span>
+<span class="detail">200+ jobs posted</span>
+</div>
+</div>
+
+<h2 style="margin:40px 0 25px;font-size:2.2em;font-weight:800">🔥 What's Hot Right Now</h2>
+<div class="grid">
+<div class="card hackathon-card" onclick="switchTab('hackathons')">
+<div class="card-header">
+<div class="card-icon">🏆</div>
+<div class="card-badge badge-live">LIVE NOW</div>
+</div>
+<div class="card-title">AI Innovation Hackathon</div>
+<div class="card-desc">Build AI-powered solutions. Win ₹5 Lakhs + Job offers from top companies</div>
+<div class="countdown">
+<div class="countdown-item">
+<span class="countdown-num">2</span>
+<span class="countdown-label">Days</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">14</span>
+<span class="countdown-label">Hours</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">32</span>
+<span class="countdown-label">Mins</span>
+</div>
+</div>
+<button class="btn-primary">Join Now - 1,234 Registered</button>
+</div>
+
+<div class="card job-card" onclick="switchTab('jobs')">
+<div class="card-header">
+<div class="card-icon">💼</div>
+<div class="card-badge badge-free">NEW</div>
+</div>
+<div class="card-title">Software Engineer - Google</div>
+<div class="card-desc">📍 Bangalore • 💰 ₹25-40 LPA • ⏰ Full Time • 🎓 0-2 years</div>
+<div class="card-meta">
+<span class="tag">DSA</span>
+<span class="tag">System Design</span>
+<span class="tag">Python</span>
+</div>
+<button class="btn-primary">Apply Now</button>
+</div>
+
+<div class="card" onclick="switchTab('learn')">
+<div class="card-header">
+<div class="card-icon">📚</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Master DSA in 6 Months</div>
+<div class="card-desc">200+ resources from beginner to competitive programming legend level</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<p style="text-align:right;font-size:0.9em;color:#9ca3af;margin-bottom:15px">0% Complete</p>
+<button class="btn-primary">Start Learning</button>
+</div>
+</div>
+
+<h2 style="margin:50px 0 25px;font-size:2.2em;font-weight:800">🎯 All Learning Paths</h2>
+<div class="grid">
+<div class="card" onclick="switchTab('learn')">
+<div class="card-header">
+<div class="card-icon">📊</div>
+<div class="card-badge badge-free">200+ Resources</div>
+</div>
+<div class="card-title">Data Structures & Algorithms</div>
+<div class="card-desc">Master DSA from basics to competitive programming. LeetCode, Codeforces, ICPC prep</div>
+<button class="btn-primary">Explore</button>
+</div>
+
+<div class="card" onclick="switchTab('learn')">
+<div class="card-header">
+<div class="card-icon">🌐</div>
+<div class="card-badge badge-free">150+ Resources</div>
+</div>
+<div class="card-title">Full Stack Development</div>
+<div class="card-desc">Frontend, Backend, DevOps - Complete web development mastery path</div>
+<button class="btn-primary">Explore</button>
+</div>
+
+<div class="card" onclick="switchTab('learn')">
+<div class="card-header">
+<div class="card-icon">🤖</div>
+<div class="card-badge badge-premium">120+ Resources</div>
+</div>
+<div class="card-title">AI/ML & Deep Learning</div>
+<div class="card-desc">Machine Learning, Deep Learning, NLP, Computer Vision - Research level</div>
+<button class="btn-primary">Explore</button>
+</div>
+
+<div class="card" onclick="switchTab('learn')">
+<div class="card-header">
+<div class="card-icon">🏗️</div>
+<div class="card-badge badge-free">100+ Resources</div>
+</div>
+<div class="card-title">System Design</div>
+<div class="card-desc">Design scalable systems like Google, Amazon, Netflix. FAANG interview prep</div>
+<button class="btn-primary">Explore</button>
+</div>
+
+<div class="card" onclick="switchTab('learn')">
+<div class="card-header">
+<div class="card-icon">☁️</div>
+<div class="card-badge badge-free">90+ Resources</div>
+</div>
+<div class="card-title">Cloud & DevOps</div>
+<div class="card-desc">AWS, Docker, Kubernetes, CI/CD - Complete cloud mastery</div>
+<button class="btn-primary">Explore</button>
+</div>
+
+<div class="card" onclick="switchTab('learn')">
+<div class="card-header">
+<div class="card-icon">🔐</div>
+<div class="card-badge badge-premium">110+ Resources</div>
+</div>
+<div class="card-title">Cybersecurity</div>
+<div class="card-desc">Ethical hacking, pentesting, OSCP prep, security certifications</div>
+<button class="btn-primary">Explore</button>
+</div>
+</div>
+</div>
+
+<!-- Learn Section -->
+<div class="section" id="learn">
+<div class="hero">
+<h2>📚 Complete Learning Hub</h2>
+<p>800+ curated resources across 12 technology fields - From beginner to expert level</p>
+</div>
+
+<div class="grid">
+<div class="card">
+<div class="card-header">
+<div class="card-icon">📊</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Data Structures & Algorithms</div>
+<div class="card-desc">200+ resources: Arrays, Trees, Graphs, DP, Competitive Programming, ICPC prep</div>
+<div class="card-meta">
+<span class="tag">LeetCode</span>
+<span class="tag">Codeforces</span>
+<span class="tag">Hindi + English</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://leetcode.com/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🌐</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Full Stack Web Development</div>
+<div class="card-desc">150+ resources: React, Node.js, Next.js, TypeScript, System Architecture</div>
+<div class="card-meta">
+<span class="tag">Frontend</span>
+<span class="tag">Backend</span>
+<span class="tag">Projects</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://react.dev/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🤖</div>
+<div class="card-badge badge-premium">PREMIUM</div>
+</div>
+<div class="card-title">AI/ML & Deep Learning</div>
+<div class="card-desc">120+ resources: ML, DL, NLP, Computer Vision, Research Papers, Projects</div>
+<div class="card-meta">
+<span class="tag">TensorFlow</span>
+<span class="tag">PyTorch</span>
+<span class="tag">Kaggle</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="alert('Upgrade to Premium to unlock!')">🔒 Unlock Premium</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🏗️</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">System Design & Architecture</div>
+<div class="card-desc">100+ resources: Scalability, Distributed Systems, FAANG Interview Prep</div>
+<div class="card-meta">
+<span class="tag">Design Instagram</span>
+<span class="tag">Design YouTube</span>
+<span class="tag">MIT Course</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://github.com/donnemartin/system-design-primer','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">☁️</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Cloud & DevOps</div>
+<div class="card-desc">90+ resources: AWS, Docker, Kubernetes, CI/CD, Terraform, Monitoring</div>
+<div class="card-meta">
+<span class="tag">AWS</span>
+<span class="tag">Docker</span>
+<span class="tag">K8s</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://aws.amazon.com/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">📱</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Mobile Development</div>
+<div class="card-desc">80+ resources: React Native, Flutter, iOS, Android, App Publishing</div>
+<div class="card-meta">
+<span class="tag">React Native</span>
+<span class="tag">Flutter</span>
+<span class="tag">Swift</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://reactnative.dev/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🔐</div>
+<div class="card-badge badge-premium">PREMIUM</div>
+</div>
+<div class="card-title">Cybersecurity & Ethical Hacking</div>
+<div class="card-desc">110+ resources: Pentesting, OSCP, CEH, TryHackMe, HackTheBox</div>
+<div class="card-meta">
+<span class="tag">Ethical Hacking</span>
+<span class="tag">OSCP</span>
+<span class="tag">Security</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="alert('Upgrade to Premium to unlock!')">🔒 Unlock Premium</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">⛓️</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Blockchain & Web3</div>
+<div class="card-desc">85+ resources: Solidity, Smart Contracts, DeFi, NFTs, Web3.js</div>
+<div class="card-meta">
+<span class="tag">Solidity</span>
+<span class="tag">Ethereum</span>
+<span class="tag">DeFi</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://ethereum.org/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🗄️</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Database Engineering</div>
+<div class="card-desc">70+ resources: SQL, NoSQL, Redis, Database Internals, Optimization</div>
+<div class="card-meta">
+<span class="tag">PostgreSQL</span>
+<span class="tag">MongoDB</span>
+<span class="tag">Redis</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://www.postgresql.org/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🎮</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Game Development</div>
+<div class="card-desc">60+ resources: Unity, Unreal Engine, Game Physics, Graphics Programming</div>
+<div class="card-meta">
+<span class="tag">Unity</span>
+<span class="tag">Unreal</span>
+<span class="tag">C#</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://learn.unity.com/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">⚙️</div>
+<div class="card-badge badge-free">FREE</div>
+</div>
+<div class="card-title">Embedded Systems & IoT</div>
+<div class="card-desc">65+ resources: Arduino, Raspberry Pi, RTOS, IoT Protocols, Sensors</div>
+<div class="card-meta">
+<span class="tag">Arduino</span>
+<span class="tag">RPi</span>
+<span class="tag">MQTT</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="window.open('https://www.arduino.cc/','_blank')">Start Learning</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">⚛️</div>
+<div class="card-badge badge-premium">PREMIUM</div>
+</div>
+<div class="card-title">Quantum Computing</div>
+<div class="card-desc">40+ resources: Quantum Algorithms, Qiskit, Quantum Gates, IBM Quantum</div>
+<div class="card-meta">
+<span class="tag">Qiskit</span>
+<span class="tag">IBM</span>
+<span class="tag">Future Tech</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" style="width:0%"></div>
+</div>
+<button class="btn-primary" onclick="alert('Upgrade to Premium to unlock!')">🔒 Unlock Premium</button>
+</div>
+</div>
+</div>
+
+<!-- Hackathons Section -->
+<div class="section" id="hackathons">
+<div class="hero">
+<h2>🏆 Live Hackathons & Competitions</h2>
+<p>Compete, win prizes, get hired by top companies</p>
+</div>
+
+<div class="grid">
+<div class="card hackathon-card">
+<div class="card-header">
+<div class="card-icon">🏆</div>
+<div class="card-badge badge-live">LIVE NOW</div>
+</div>
+<div class="card-title">AI Innovation Hackathon 2024</div>
+<div class="card-desc">Build AI-powered solutions. Win ₹5 Lakhs + Job offers from Google, Microsoft, Amazon</div>
+<div class="countdown">
+<div class="countdown-item">
+<span class="countdown-num">2</span>
+<span class="countdown-label">Days</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">14</span>
+<span class="countdown-label">Hours</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">32</span>
+<span class="countdown-label">Mins</span>
+</div>
+</div>
+<div class="card-meta">
+<span class="tag">AI/ML</span>
+<span class="tag">Online</span>
+<span class="tag">1,234 Registered</span>
+</div>
+<button class="btn-primary">Join Now - Free Entry</button>
+</div>
+
+<div class="card hackathon-card">
+<div class="card-header">
+<div class="card-icon">🌐</div>
+<div class="card-badge badge-live">LIVE NOW</div>
+</div>
+<div class="card-title">Web3 DeFi Hackathon</div>
+<div class="card-desc">Build decentralized finance applications. Win ₹3 Lakhs + Crypto rewards</div>
+<div class="countdown">
+<div class="countdown-item">
+<span class="countdown-num">5</span>
+<span class="countdown-label">Days</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">8</span>
+<span class="countdown-label">Hours</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">45</span>
+<span class="countdown-label">Mins</span>
+</div>
+</div>
+<div class="card-meta">
+<span class="tag">Blockchain</span>
+<span class="tag">Online</span>
+<span class="tag">892 Registered</span>
+</div>
+<button class="btn-primary">Join Now - Free Entry</button>
+</div>
+
+<div class="card hackathon-card">
+<div class="card-header">
+<div class="card-icon">📱</div>
+<div class="card-badge badge-live">LIVE NOW</div>
+</div>
+<div class="card-title">Mobile App Challenge</div>
+<div class="card-desc">Build innovative mobile apps. Win ₹2 Lakhs + Internship opportunities</div>
+<div class="countdown">
+<div class="countdown-item">
+<span class="countdown-num">7</span>
+<span class="countdown-label">Days</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">12</span>
+<span class="countdown-label">Hours</span>
+</div>
+<div class="countdown-item">
+<span class="countdown-num">20</span>
+<span class="countdown-label">Mins</span>
+</div>
+</div>
+<div class="card-meta">
+<span class="tag">Mobile</span>
+<span class="tag">Online</span>
+<span class="tag">654 Registered</span>
+</div>
+<button class="btn-primary">Join Now - Free Entry</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🔐</div>
+<div class="card-badge badge-free">UPCOMING</div>
+</div>
+<div class="card-title">Cybersecurity CTF Challenge</div>
+<div class="card-desc">Capture The Flag competition. Win ₹4 Lakhs + Security job offers</div>
+<p style="margin:15px 0;color:#9ca3af">Starts in 10 days</p>
+<div class="card-meta">
+<span class="tag">Security</span>
+<span class="tag">Online</span>
+<span class="tag">Register Early</span>
+</div>
+<button class="btn-primary">Register Now - Limited Slots</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">☁️</div>
+<div class="card-badge badge-free">UPCOMING</div>
+</div>
+<div class="card-title">Cloud Architecture Challenge</div>
+<div class="card-desc">Design scalable cloud solutions. Win ₹3 Lakhs + AWS credits</div>
+<p style="margin:15px 0;color:#9ca3af">Starts in 15 days</p>
+<div class="card-meta">
+<span class="tag">Cloud</span>
+<span class="tag">Online</span>
+<span class="tag">AWS Sponsored</span>
+</div>
+<button class="btn-primary">Register Now</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🎮</div>
+<div class="card-badge badge-free">UPCOMING</div>
+</div>
+<div class="card-title">Game Development Jam</div>
+<div class="card-desc">48-hour game jam. Win ₹2 Lakhs + Unity Pro licenses</div>
+<p style="margin:15px 0;color:#9ca3af">Starts in 20 days</p>
+<div class="card-meta">
+<span class="tag">Game Dev</span>
+<span class="tag">Online</span>
+<span class="tag">Unity Sponsored</span>
+</div>
+<button class="btn-primary">Register Now</button>
+</div>
+</div>
+</div>
+
+<!-- Jobs Section -->
+<div class="section" id="jobs">
+<div class="hero">
+<h2>💼 Latest Tech Jobs & Internships</h2>
+<p>200+ opportunities from top companies - Apply directly</p>
+</div>
+
+<div class="grid">
+<div class="card job-card">
+<div class="card-header">
+<div class="card-icon">💼</div>
+<div class="card-badge badge-free">NEW</div>
+</div>
+<div class="card-title">Software Engineer - Google</div>
+<div class="card-desc">📍 Bangalore • 💰 ₹25-40 LPA • ⏰ Full Time • 🎓 0-2 years</div>
+<div class="card-meta">
+<span class="tag">DSA</span>
+<span class="tag">System Design</span>
+<span class="tag">Python</span>
+</div>
+<button class="btn-primary" onclick="window.open('https://careers.google.com/','_blank')">Apply Now</button>
+</div>
+
+<div class="card job-card">
+<div class="card-header">
+<div class="card-icon">💼</div>
+<div class="card-badge badge-free">NEW</div>
+</div>
+<div class="card-title">Frontend Developer - Amazon</div>
+<div class="card-desc">📍 Hyderabad • 💰 ₹20-35 LPA • ⏰ Full Time • 🎓 1-3 years</div>
+<div class="card-meta">
+<span class="tag">React</span>
+<span class="tag">TypeScript</span>
+<span class="tag">AWS</span>
+</div>
+<button class="btn-primary" onclick="window.open('https://www.amazon.jobs/','_blank')">Apply Now</button>
+</div>
+
+<div class="card job-card">
+<div class="card-header">
+<div class="card-icon">💼</div>
+<div class="card-badge badge-free">HOT</div>
+</div>
+<div class="card-title">ML Engineer - Microsoft</div>
+<div class="card-desc">📍 Bangalore • 💰 ₹30-50 LPA • ⏰ Full Time • 🎓 2-4 years</div>
+<div class="card-meta">
+<span class="tag">ML</span>
+<span class="tag">Python</span>
+<span class="tag">Azure</span>
+</div>
+<button class="btn-primary" onclick="window.open('https://careers.microsoft.com/','_blank')">Apply Now</button>
+</div>
+
+<div class="card job-card">
+<div class="card-header">
+<div class="card-icon">💼</div>
+<div class="card-badge badge-free">NEW</div>
+</div>
+<div class="card-title">Full Stack Developer - Meta</div>
+<div class="card-desc">📍 Gurgaon • 💰 ₹28-45 LPA • ⏰ Full Time • 🎓 2-4 years</div>
+<div class="card-meta">
+<span class="tag">React</span>
+<span class="tag">Node.js</span>
+<span class="tag">GraphQL</span>
+</div>
+<button class="btn-primary" onclick="window.open('https://www.metacareers.com/','_blank')">Apply Now</button>
+</div>
+
+<div class="card job-card">
+<div class="card-header">
+<div class="card-icon">💼</div>
+<div class="card-badge badge-free">HOT</div>
+</div>
+<div class="card-title">DevOps Engineer - Netflix</div>
+<div class="card-desc">📍 Remote • 💰 ₹30-45 LPA • ⏰ Full Time • 🎓 3-5 years</div>
+<div class="card-meta">
+<span class="tag">AWS</span>
+<span class="tag">Kubernetes</span>
+<span class="tag">Docker</span>
+</div>
+<button class="btn-primary" onclick="window.open('https://jobs.netflix.com/','_blank')">Apply Now</button>
+</div>
+
+<div class="card job-card">
+<div class="card-header">
+<div class="card-icon">💼</div>
+<div class="card-badge badge-free">NEW</div>
+</div>
+<div class="card-title">Blockchain Developer - Coinbase</div>
+<div class="card-desc">📍 Remote • 💰 ₹30-50 LPA • ⏰ Full Time • 🎓 2-5 years</div>
+<div class="card-meta">
+<span class="tag">Solidity</span>
+<span class="tag">Web3</span>
+<span class="tag">Ethereum</span>
+</div>
+<button class="btn-primary" onclick="window.open('https://www.coinbase.com/careers','_blank')">Apply Now</button>
+</div>
+</div>
+
+<p style="text-align:center;margin-top:40px;font-size:1.2em;color:#6366f1;font-weight:600">+ 194 More Job Opportunities Available! 💼</p>
+</div>
+
+<!-- Projects Section -->
+<div class="section" id="projects">
+<div class="hero">
+<h2>🛠️ Project Ideas & Challenges</h2>
+<p>80+ real-world projects to build your portfolio</p>
+</div>
+
+<div class="grid">
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🌐</div>
+<div class="card-badge badge-free">POPULAR</div>
+</div>
+<div class="card-title">E-commerce Platform</div>
+<div class="card-desc">Full stack with payment gateway, cart, orders, admin panel</div>
+<div class="card-meta">
+<span class="tag">React</span>
+<span class="tag">Node.js</span>
+<span class="tag">MongoDB</span>
+<span class="tag">Stripe</span>
+</div>
+<button class="btn-primary">View Details & Start</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">💬</div>
+<div class="card-badge badge-free">TRENDING</div>
+</div>
+<div class="card-title">Real-time Chat Application</div>
+<div class="card-desc">WebSockets, group chat, file sharing, video calls</div>
+<div class="card-meta">
+<span class="tag">React</span>
+<span class="tag">Socket.io</span>
+<span class="tag">WebRTC</span>
+</div>
+<button class="btn-primary">View Details & Start</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🤖</div>
+<div class="card-badge badge-premium">ADVANCED</div>
+</div>
+<div class="card-title">AI Chatbot with NLP</div>
+<div class="card-desc">Context understanding, learning, sentiment analysis</div>
+<div class="card-meta">
+<span class="tag">Python</span>
+<span class="tag">TensorFlow</span>
+<span class="tag">NLP</span>
+</div>
+<button class="btn-primary">View Details & Start</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">📱</div>
+<div class="card-badge badge-free">POPULAR</div>
+</div>
+<div class="card-title">Social Media Clone</div>
+<div class="card-desc">Posts, comments, likes, follow system, stories</div>
+<div class="card-meta">
+<span class="tag">React Native</span>
+<span class="tag">Firebase</span>
+<span class="tag">Redux</span>
+</div>
+<button class="btn-primary">View Details & Start</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">⛓️</div>
+<div class="card-badge badge-premium">WEB3</div>
+</div>
+<div class="card-title">NFT Marketplace</div>
+<div class="card-desc">Mint, buy, sell NFTs. Smart contracts, wallet integration</div>
+<div class="card-meta">
+<span class="tag">Solidity</span>
+<span class="tag">Web3.js</span>
+<span class="tag">IPFS</span>
+</div>
+<button class="btn-primary">View Details & Start</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">🎮</div>
+<div class="card-badge badge-free">FUN</div>
+</div>
+<div class="card-title">Multiplayer Game</div>
+<div class="card-desc">Real-time gameplay, leaderboard, chat, matchmaking</div>
+<div class="card-meta">
+<span class="tag">Unity</span>
+<span class="tag">C#</span>
+<span class="tag">Photon</span>
+</div>
+<button class="btn-primary">View Details & Start</button>
+</div>
+</div>
+
+<p style="text-align:center;margin-top:40px;font-size:1.2em;color:#6366f1;font-weight:600">+ 74 More Project Ideas! 🛠️</p>
+</div>
+
+<!-- Community Section -->
+<div class="section" id="community">
+<div class="hero">
+<h2>👥 Developer Community</h2>
+<p>Connect with 50,000+ developers, share knowledge, grow together</p>
+</div>
+
+<div class="stats-grid">
+<div class="stat-card">
+<h3>👥 Active Members</h3>
+<span class="big-num">50K+</span>
+<span class="detail">Growing daily</span>
+</div>
+<div class="stat-card">
+<h3>💬 Discussions</h3>
+<span class="big-num">10K+</span>
+<span class="detail">This month</span>
+</div>
+<div class="stat-card">
+<h3>🎓 Mentors</h3>
+<span class="big-num">500+</span>
+<span class="detail">Ready to help</span>
+</div>
+<div class="stat-card">
+<h3>🏆 Events</h3>
+<span class="big-num">100+</span>
+<span class="detail">Per month</span>
+</div>
+</div>
+
+<h2 style="margin:40px 0 25px;font-size:2.2em;font-weight:800">🔥 Trending Discussions</h2>
+<div class="grid">
+<div class="card">
+<div class="card-header">
+<div class="card-icon">👤</div>
+<div class="card-badge badge-free">2h ago</div>
+</div>
+<div class="card-title">Just cracked Amazon SDE-2! AMA</div>
+<div class="card-desc">Sharing my 6-month preparation strategy, resources, and interview experience...</div>
+<div class="card-meta">
+<span class="tag">👍 245 Likes</span>
+<span class="tag">💬 89 Comments</span>
+<span class="tag">Interview</span>
+</div>
+<button class="btn-primary">Read & Discuss</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">👤</div>
+<div class="card-badge badge-free">5h ago</div>
+</div>
+<div class="card-title">Best System Design resources?</div>
+<div class="card-desc">Preparing for FAANG interviews. Need recommendations for system design...</div>
+<div class="card-meta">
+<span class="tag">👍 156 Likes</span>
+<span class="tag">💬 67 Comments</span>
+<span class="tag">System Design</span>
+</div>
+<button class="btn-primary">Read & Discuss</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">👤</div>
+<div class="card-badge badge-free">1d ago</div>
+</div>
+<div class="card-title">Built my first AI project!</div>
+<div class="card-desc">Image classification model with 95% accuracy. Here's how I did it...</div>
+<div class="card-meta">
+<span class="tag">👍 312 Likes</span>
+<span class="tag">💬 124 Comments</span>
+<span class="tag">AI/ML</span>
+</div>
+<button class="btn-primary">Read & Discuss</button>
+</div>
+</div>
+
+<h2 style="margin:50px 0 25px;font-size:2.2em;font-weight:800">🎓 Find a Mentor</h2>
+<div class="grid">
+<div class="card">
+<div class="card-header">
+<div class="card-icon">👨‍💻</div>
+<div class="card-badge badge-free">AVAILABLE</div>
+</div>
+<div class="card-title">Rahul Sharma - Google SDE</div>
+<div class="card-desc">5 years experience • Specializes in DSA, System Design, Interview Prep</div>
+<div class="card-meta">
+<span class="tag">⭐ 4.9/5</span>
+<span class="tag">150+ Sessions</span>
+</div>
+<button class="btn-primary">Book Session - Free</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">👩‍💻</div>
+<div class="card-badge badge-free">AVAILABLE</div>
+</div>
+<div class="card-title">Priya Patel - Amazon ML Engineer</div>
+<div class="card-desc">4 years experience • Specializes in AI/ML, Deep Learning, Kaggle</div>
+<div class="card-meta">
+<span class="tag">⭐ 4.8/5</span>
+<span class="tag">120+ Sessions</span>
+</div>
+<button class="btn-primary">Book Session - Free</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-icon">👨‍💻</div>
+<div class="card-badge badge-free">AVAILABLE</div>
+</div>
+<div class="card-title">Amit Kumar - Microsoft Senior SDE</div>
+<div class="card-desc">7 years experience • Specializes in Full Stack, Cloud, Architecture</div>
+<div class="card-meta">
+<span class="tag">⭐ 5.0/5</span>
+<span class="tag">200+ Sessions</span>
+</div>
+<button class="btn-primary">Book Session - Free</button>
+</div>
+</div>
+</div>
+
+<!-- Premium Section -->
+<div class="section" id="premium">
+<div class="hero">
+<h2>⭐ Upgrade to Premium</h2>
+<p>Unlock all features and accelerate your learning journey</p>
+</div>
+
+<div class="premium-banner">
+<h3>🚀 DevMastery Premium</h3>
+<p>Get unlimited access to all resources, exclusive content, and priority support</p>
+<div class="premium-features">
+<div class="premium-feature">✅ All 800+ Resources Unlocked</div>
+<div class="premium-feature">✅ Exclusive AI/ML Content</div>
+<div class="premium-feature">✅ Priority Hackathon Access</div>
+<div class="premium-feature">✅ 1-on-1 Mentor Sessions</div>
+<div class="premium-feature">✅ Certification Courses</div>
+<div class="premium-feature">✅ Job Referrals</div>
+<div class="premium-feature">✅ Ad-Free Experience</div>
+<div class="premium-feature">✅ Early Access to Features</div>
+</div>
+<button class="btn" style="background:#000;margin-top:25px;max-width:400px;margin-left:auto;margin-right:auto">Upgrade to Premium - ₹999/month</button>
+<p style="margin-top:15px;font-size:0.9em;opacity:0.8">7-day free trial • Cancel anytime</p>
+</div>
+
+<h2 style="margin:50px 0 25px;font-size:2.2em;font-weight:800;text-align:center">💎 Premium Benefits</h2>
+<div class="grid">
+<div class="card">
+<div class="card-icon" style="font-size:3em;text-align:center;margin-bottom:15px">🎓</div>
+<div class="card-title" style="text-align:center">Certification Courses</div>
+<div class="card-desc" style="text-align:center">Get industry-recognized certificates. Boost your resume and LinkedIn profile</div>
+</div>
+
+<div class="card">
+<div class="card-icon" style="font-size:3em;text-align:center;margin-bottom:15px">🤝</div>
+<div class="card-title" style="text-align:center">Job Referrals</div>
+<div class="card-desc" style="text-align:center">Direct referrals to Google, Amazon, Microsoft, and 50+ top companies</div>
+</div>
+
+<div class="card">
+<div class="card-icon" style="font-size:3em;text-align:center;margin-bottom:15px">👨‍🏫</div>
+<div class="card-title" style="text-align:center">Personal Mentor</div>
+<div class="card-desc" style="text-align:center">Get assigned a personal mentor from FAANG companies for guidance</div>
+</div>
+
+<div class="card">
+<div class="card-icon" style="font-size:3em;text-align:center;margin-bottom:15px">🏆</div>
+<div class="card-title" style="text-align:center">Exclusive Hackathons</div>
+<div class="card-desc" style="text-align:center">Access to premium-only hackathons with bigger prizes and better opportunities</div>
+</div>
+
+<div class="card">
+<div class="card-icon" style="font-size:3em;text-align:center;margin-bottom:15px">📊</div>
+<div class="card-title" style="text-align:center">Advanced Analytics</div>
+<div class="card-desc" style="text-align:center">Detailed progress tracking, skill gap analysis, personalized recommendations</div>
+</div>
+
+<div class="card">
+<div class="card-icon" style="font-size:3em;text-align:center;margin-bottom:15px">⚡</div>
+<div class="card-title" style="text-align:center">Priority Support</div>
+<div class="card-desc" style="text-align:center">Get your questions answered within 24 hours by expert mentors</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+let currentUser=null;
+
+function showLogin(){
+document.getElementById('loginForm').classList.remove('hidden');
+document.getElementById('signupForm').classList.add('hidden');
+}
+
+function showSignup(){
+document.getElementById('loginForm').classList.add('hidden');
+document.getElementById('signupForm').classList.remove('hidden');
+}
+
+function login(){
+const email=document.getElementById('loginEmail').value;
+const password=document.getElementById('loginPassword').value;
+if(!email||!password){
+alert('⚠️ Please enter email and password');
+return;
+}
+const user={
+name:email.split('@')[0],
+email:email,
+level:1,
+points:0,
+badge:'FREE',
+learningProgress:0,
+hackathonsJoined:0,
+projectsBuilt:0,
+jobApplications:0
+};
+localStorage.setItem('devMasteryUser',JSON.stringify(user));
+loadApp(user);
+}
+
+function signup(){
+const name=document.getElementById('signupName').value;
+const email=document.getElementById('signupEmail').value;
+const password=document.getElementById('signupPassword').value;
+const interest=document.getElementById('signupInterest').value;
+if(!name||!email||!password){
+alert('⚠️ Please fill all fields');
+return;
+}
+const user={
+name:name,
+email:email,
+interest:interest,
+level:1,
+points:0,
+badge:'FREE',
+learningProgress:0,
+hackathonsJoined:0,
+projectsBuilt:0,
+jobApplications:0
+};
+localStorage.setItem('devMasteryUser',JSON.stringify(user));
+loadApp(user);
+}
+
+function demoLogin(){
+const user={
+name:'Demo User',
+email:'demo@devmastery.com',
+interest:'Full Stack Development',
+level:1,
+points:0,
+badge:'FREE',
+learningProgress:0,
+hackathonsJoined:0,
+projectsBuilt:0,
+jobApplications:0
+};
+localStorage.setItem('devMasteryUser',JSON.stringify(user));
+loadApp(user);
+}
+
+function loadApp(user){
+currentUser=user;
+document.getElementById('authContainer').style.display='none';
+document.getElementById('appContainer').classList.add('active');
+document.getElementById('userName').textContent=user.name;
+document.getElementById('userLevel').textContent=user.level;
+document.getElementById('userPoints').textContent=user.points;
+document.getElementById('userBadge').textContent=user.badge;
+document.getElementById('learningProgress').textContent=user.learningProgress+'%';
+document.getElementById('hackathonsJoined').textContent=user.hackathonsJoined;
+document.getElementById('projectsBuilt').textContent=user.projectsBuilt;
+document.getElementById('jobApplications').textContent=user.jobApplications;
+}
+
+function logout(){
+if(confirm('Are you sure you want to logout?')){
+localStorage.removeItem('devMasteryUser');
+location.reload();
+}
+}
+
+function switchTab(tabName){
+const tabs=document.querySelectorAll('.nav button');
+const sections=document.querySelectorAll('.section');
+tabs.forEach(t=>t.classList.remove('active'));
+sections.forEach(s=>s.classList.remove('active'));
+const targetTab=document.querySelector(`[data-tab="${tabName}"]`);
+if(targetTab){
+targetTab.classList.add('active');
+document.getElementById(tabName).classList.add('active');
+window.scrollTo({top:0,behavior:'smooth'});
+}
+}
+
+const tabs=document.querySelectorAll('.nav button');
+tabs.forEach(tab=>{
+tab.addEventListener('click',()=>{
+const target=tab.dataset.tab;
+switchTab(target);
+});
+});
+
+window.onload=function(){
+const savedUser=localStorage.getItem('devMasteryUser');
+if(savedUser){
+loadApp(JSON.parse(savedUser));
+}
+};
+
+console.log('🚀 DevMastery Hub - Complete Commercial Platform');
+console.log('✅ 800+ Resources | 🏆 Live Hackathons | 💼 200+ Jobs | 🛠️ 80+ Projects');
+console.log('👥 50K+ Community | ⭐ Premium Features | 🎓 Certifications');
+</script>
+</body>
+</html>
